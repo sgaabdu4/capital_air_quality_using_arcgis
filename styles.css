@@ -61,7 +61,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 100px;
+    height: 75px;
     /* background-color: white; */
     --calcite-ui-icon-color: var(--calcite-ui-border-input);
     --calcite-ui-brand: var(--primary-bg-color);
@@ -90,39 +90,58 @@ body #bottom-bar {
     display: none
 }
 
-#highest-pollution-list {
+#highest-pollution-list,
+#color-legend {
     height: 50px;
     display: none;
-
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    width: 25%;
+    background-color: var(--primary-bg-color);
+    z-index: 1000;
 }
+
+calcite-list {
+    background-color: var(--primary-bg-color);
+}
+
+#color-legend {
+    height: 50px;
+}
+
 
 h3 {
     font-weight: bold;
     color: var(--primary-text-color)
 }
 
-calcite-icon,
+/* calcite-icon,
 calcite-button {
     scale: 1.25;
+} */
+
+#custom-icon {
+    padding-top: 10px;
+
 }
 
-#custom-icon,
 calcite-switch {
-    padding-top: 5px;
+    padding-top: 10px;
+    --calcite-ui-icon-color: var(--calcite-ui-icon-color);
+    --calcite-ui-brand: var(--calcite-ui-brand);
+    --calcite-ui-brand-hover: var(--calcite-ui-brand-hover);
+    --calcite-ui-text-inverse: var(--calcite-ui-text-inverse);
+    --primary-bg-color: var(--primary-bg-color);
+    --secondary-bg-color: var(--secondary-bg-color);
+    --primary-text-color: var(--primary-text-color);
 }
 
-calcite-list {
-    position: absolute;
-    top: 20px;
-    right: 5%;
-    width: 25%;
-    background-color: var(--primary-bg-color);
-    z-index: 1000;
-}
+
 
 #highest-pollution-title {
     --calcite-ui-text-1: var(--primary-text-color);
-
+    --calcite-ui-brand: rgba(0, 0, 0, 0)
 }
 
 #sliderValue {
@@ -162,4 +181,122 @@ calcite-slider {
     --calcite-ui-text-2: var(--primary-text-color);
     --calcite-ui-foreground-1: var(--primary-bg-color);
     --calcite-ui-foreground-2: var(--calcite-ui-foreground-2)
+}
+
+#popover-div {
+    position: absolute;
+    /* bottom: 5%; */
+    /* top: 80%; */
+    /* This positions the box's top edge to the center of the viewDiv */
+    /* left: 50%; */
+    /* This positions the box's left edge to the center of the viewDiv */
+    /* transform: translate(-50%, -50%); */
+    /* This adjusts for the actual size of the box, centering it */
+    width: 1;
+    height: 1;
+    z-index: 2000;
+    offset: initial;
+    /* padding-top: 20px; */
+    /* padding-bottom: 40px; */
+    /* padding-left: 20px; */
+    /* padding-right: 20px; */
+}
+
+.popover-content {
+    padding: 12px;
+    margin: 0;
+}
+
+.highlight-text {
+    font-weight: bold;
+}
+
+.esri-view .esri-view-surface--touch-none:focus::after {
+    outline: none !important;
+}
+
+p {
+    font-size: 13px;
+}
+
+.legend-container {
+    display: flex;
+    margin-bottom: 5px;
+    height: 20px;
+    position: absolute
+}
+
+.color-box {
+    width: 50px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.labels-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Good (typically green to represent clear and healthy air) */
+#good-legend {
+    --calcite-ui-foreground-1: rgba(50, 212, 50, 0.8);
+    --calcite-ui-foreground-2: rgba(50, 212, 50, 0.8);
+    --calcite-ui-brand: rgba(0, 0, 0, 0);
+}
+
+/* Moderate (usually represented by yellow or light orange) */
+#moderate-legend {
+    --calcite-ui-foreground-1: rgba(204, 208, 13, 0.8);
+    --calcite-ui-foreground-2: rgba(204, 208, 13, 0.8);
+    --calcite-ui-brand: rgba(0, 0, 0, 0);
+}
+
+/* Unhealthy for Sensitive Groups (typically orange) */
+#unhealthy-sensitive-groups-legend {
+    --calcite-ui-foreground-1: rgba(255, 140, 85, 0.8);
+    --calcite-ui-foreground-2: rgba(255, 140, 85, 0.8);
+    --calcite-ui-brand: rgba(0, 0, 0, 0);
+}
+
+/* Unhealthy (usually red to represent unhealthy conditions for everyone) */
+#unhealthy-legend {
+    --calcite-ui-foreground-1: rgba(255, 85, 85, 0.8);
+    --calcite-ui-foreground-2: rgba(255, 85, 85, 0.8);
+    --calcite-ui-brand: rgba(0, 0, 0, 0);
+}
+
+/* Very Unhealthy (purple, indicating very unhealthy conditions) */
+#very-unhealthy-legend {
+    --calcite-ui-foreground-1: rgba(255, 95, 95, 0.8);
+    --calcite-ui-foreground-2: rgba(255, 95, 95, 0.8);
+    --calcite-ui-brand: rgba(0, 0, 0, 0);
+}
+
+/* Hazardous (maroon or deep red, indicating hazardous conditions) */
+#hazardous-legend {
+    --calcite-ui-foreground-1: rgba(140, 20, 50, 0.8);
+    --calcite-ui-foreground-2: rgba(140, 20, 50, 0.8);
+    --calcite-ui-brand: rgba(0, 0, 0, 0);
+    --calcite-ui-text-1: white
+}
+
+/* Undefined */
+#undefined-legend {
+    --calcite-ui-foreground-1: rgba(0, 0, 0, 0.8);
+    --calcite-ui-foreground-2: rgba(0, 0, 0, 0.8);
+    --calcite-ui-brand: rgba(0, 0, 0, 0);
+    --calcite-ui-text-1: white
+}
+
+#color-legend {
+    display: none
+}
+
+calcite-list-item {
+    --calcite-ui-foreground-2: var(--calcite-ui-foreground-2);
+    cursor: default;
+}
+
+.chart-list-item {
+    --calcite-ui-brand: rgba(0, 0, 0, 0);
 }

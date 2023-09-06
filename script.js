@@ -79,16 +79,21 @@ async function fetchCountriesMapData() {
         slider["value"] = minAQI
 
         slider.addEventListener('calciteSliderChange', function (event) { onMovingSlider(slider) })
-
+        let color = getColor(slider["value"]);
         const sliderValueElement = document.getElementById('sliderValue');
-        sliderValueElement.textContent = slider["value"];
+        sliderValueElement.innerHTML = `Countries with pollution over <span class="highlight-text">${slider["value"]} </span> AQI`;
+        let highlightText = sliderValueElement.querySelector(".highlight-text");
+        highlightText.style.color = color;  // Assuming 'color' is a variable with your color value
     }
 
 }
 
 function onMovingSlider(slider) {
+    let color = getColor(slider["value"]);
     const sliderValueElement = document.getElementById('sliderValue');
-    sliderValueElement.textContent = slider["value"];
+    sliderValueElement.innerHTML = `Countries with pollution over <span class="highlight-text">${slider["value"]} </span> AQI`;
+    let highlightText = sliderValueElement.querySelector(".highlight-text");
+    highlightText.style.color = color;  // Assuming 'color' is a variable with your color value
     countriesLayer.renderer = null;
 
     updateCountriesRenderer(slider["value"]);
@@ -136,13 +141,33 @@ document.getElementById("surprise-me").addEventListener("click", function () {
 
 document.getElementById("chart-button").addEventListener("click", function () {
     const pollutionList = document.getElementById("highest-pollution-list");
+    const colorLegend = document.getElementById("color-legend");
+    if (colorLegend.style.display !== "none") { colorLegend.style.display = 'none' }
+
     // Toggle the display style
     if (pollutionList.style.display === "none" || pollutionList.style.display === "") {
         pollutionList.style.display = "block";
+        pollutionList.style.color = "green";
+
     } else {
         pollutionList.style.display = "none";
     }
 });
+
+document.getElementById("show-legend-button").addEventListener("click", function () {
+    const colorLegend = document.getElementById("color-legend");
+    const pollutionList = document.getElementById("highest-pollution-list");
+    if (pollutionList.style.display !== "none") { pollutionList.style.display = 'none' }
+    // Toggle the display style
+    if (colorLegend.style.display === "none" || colorLegend.style.display === "") {
+        colorLegend.style.display = "block";
+        colorLegend.style.color = "green";
+
+    } else {
+        colorLegend.style.display = "none";
+    }
+});
+
 function getColor(aqi) {
     var colors = adjustedColors = [
         "rgba(50, 212, 50, 0.8)",      // Less fluorescent green
@@ -183,6 +208,7 @@ function addCountryToList(countryName, aqi) {
 
     // Set attributes for the new item
     newItem.setAttribute('label', countryName);
+    newItem.setAttribute('class', 'chart-list-item');
 
     let severity = getSeverityFromAqi(aqi, ''); // Assuming you have this function from your previous code
     newItem.setAttribute('description', `Air pollution Index: ${aqi} (${severity})`);
@@ -226,6 +252,7 @@ require(["esri/config",
         zoom: 2,
         container: "viewDiv"
     });
+    console.log(view)
     countriesLayer = new FeatureLayer({
         url: "https://services6.arcgis.com/xX0nnxYki76xgN4F/arcgis/rest/services/countries/FeatureServer/0"
     });
@@ -283,7 +310,7 @@ require(["esri/config",
      * used as input to a reverse geocode method and the resulting
      * address is printed to the popup content.
      *******************************************************************/
-    view.popupEnabled = false;
+    // view.popupEnabled = false;
 
     view.on("click", (event) => {
         // Get the coordinates of the click on the view
@@ -318,7 +345,8 @@ require(["esri/config",
                 // console.log(aqi);
 
                 severity = getSeverityFromAqi(aqi, severity);
-
+                showPopover(event, aqi, severity, countryName, capital)
+                // console.log(event.mapPoint)
                 // //todo calcite popover use
                 // const popover = document.getElementById("popover")
                 // popover.open = true
@@ -326,19 +354,19 @@ require(["esri/config",
 
                 // popover.addEventListener('calciteSliderChange', function (event) { })
 
-                view.openPopup({
-                    // Set the popup's title to the coordinates of the location
-                    title: `${countryName} - ${capital}`,
-                    location: event.mapPoint, // Set the location of the popup to the clicked location
-                    content: `Pollution data ${aqi || ''} - ${severity}`,
-                });
+                // view.openPopup({
+                //     // Set the popup's title to the coordinates of the location
+                //     title: `${countryName} - ${capital}`,
+                //     location: event.mapPoint, // Set the location of the popup to the clicked location
+                //     content: `Pollution data ${aqi || ''} - ${severity}`,
+                // });
 
             })
             .catch(() => {
-                // If the promise fails and no result is found, show a generic message
-                view.popup.content = "No address was found for this location";
-                view.popup.title = `Cannot locate country`
-                view.popup.location = event.mapPoint// Set the location of the popup to the clicked location
+                // // If the promise fails and no result is found, show a generic message
+                // view.popup.content = "No address was found for this location";
+                // view.popup.title = `Cannot locate country`
+                // view.popup.location = event.mapPoint// Set the location of the popup to the clicked location
 
             });
     });
@@ -372,3 +400,29 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 }
 // setInterval(fetchDataForCountry, 60000); // 60000 milliseconds = 1 minute
+function showPopover(event, aqi, severity, countryName, capital) {
+    const popover = document.getElementById("popover");
+    const popoverdiv = document.getElementById("popover-div");
+    // const mapViewDiv = document.getElementById("viewDiv");
+    console.log(JSON.stringify(event))
+    // // Get the offset of the MapView's container
+    // const rect = mapViewDiv.getBoundingClientRect();
+    // // Calculate the position relative to the MapView's container
+    // const x = event.x - rect.left;
+    // const y = event.y - rect.top;
+    popoverdiv.style.left = event.x + 'px';
+    popoverdiv.style.top = event.y + 100 + 'px';
+    // Set the content of the popover. 
+    // This example assumes the country feature has an attribute named 'name'.
+    let color = getColor(aqi);
+
+
+
+    popover.innerHTML = `<p class="popover-content">Pollution data ${aqi || ''} <span class="highlight-text">- ${severity}</span></p>`;
+    popover.heading = `${countryName} - ${capital}`
+    let highlightText = popover.querySelector(".highlight-text");
+    highlightText.style.color = color;  // Assuming 'color' is a variable with your color value
+    popover["open"] = true;
+
+    console.log(popover)
+}
