@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQI Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/3.0.0/fetch.min.js"></script>
+</head>
+
+<body>
+    <div id="map" style="width: 100%; height: 400px;"></div>
+    <script>
+        var map = L.map('map').setView([20, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Capital cities and their corresponding ISO 3166-1 alpha-2 country codes
+        var capitals = {
+            'Afghanistan': 'kabul',
+            'Albania': 'tirana',
+            'Algeria': 'algiers',
+            'Andorra': 'andorra-la-vella',
+            'Angola': 'luanda',
+            'Antigua and Barbuda': 'saint-johns',
+            'Argentina': 'buenos-aires',
+            'Armenia': 'yerevan',
+            'Australia': 'canberra',
+            'Austria': 'vienna',
+            'Azerbaijan': 'baku',
+            'Bahamas': 'nassau',
+            'Bahrain': 'manama',
+            'Bangladesh': 'dhaka',
+            'Barbados': 'bridgetown',
+            'Belarus': 'minsk',
+            'Belgium': 'brussels',
+            'Belize': 'belmopan',
+            'Benin': 'porto-novo',
+            'Bhutan': 'thimphu',
+            'Bolivia': 'la-paz',
+            'Bosnia and Herzegovina': 'sarajevo',
+            'Botswana': 'gaborone',
+            'Brazil': 'brasilia',
+            'Brunei': 'bandar-seri-begawan',
+            'Bulgaria': 'sofia',
+            'Burkina Faso': 'ouagadougou',
+            'Burundi': 'gitega',
+            'Cabo Verde': 'praia',
+            'Cambodia': 'phnom-penh',
+            'Cameroon': 'yaounde',
+            'Canada': 'ottawa',
+            'Central African Republic': 'bangui',
+            'Chad': 'ndjamena',
+            'Chile': 'santiago',
+            'China': 'beijing',
+            'Colombia': 'bogota',
+            'Comoros': 'moroni',
+            'Congo (Brazzaville)': 'brazzaville',
+            'Congo (Kinshasa)': 'kinshasa',
+            'Costa Rica': 'san-jose',
+            'Cote dIvoire': 'yamoussoukro',
+            'Croatia': 'zagreb',
+            'Cuba': 'havana',
+            'Cyprus': 'nicosia',
+            'Czech Republic': 'prague',
+            'Denmark': 'copenhagen',
+            'Djibouti': 'djibouti',
+            'Dominica': 'roseau',
+            'Dominican Republic': 'santo-domingo',
+            'Ecuador': 'quito',
+            'Egypt': 'cairo',
+            'El Salvador': 'san-salvador',
+            'Equatorial Guinea': 'malabo',
+            'Eritrea': 'asmara',
+            'Estonia': 'tallinn',
+            'Eswatini': 'mbabane',
+            'Ethiopia': 'addis-ababa',
+            'Fiji': 'suva',
+            'Finland': 'helsinki',
+            'France': 'paris',
+            'Gabon': 'libreville',
+            'Gambia': 'banjul',
+            'Georgia': 'tbilisi',
+            'Germany': 'berlin',
+            'Ghana': 'accra',
+            'Greece': 'athens',
+            'Grenada': 'saint-georges',
+            'Guatemala': 'guatemala-city',
+            'Guinea': 'conakry',
+            'Guinea-Bissau': 'bissau',
+            'Guyana': 'georgetown',
+            'Haiti': 'port-au-prince',
+            'Honduras': 'tegucigalpa',
+            'Hungary': 'budapest',
+            'Iceland': 'reykjavik',
+            'India': 'new-delhi',
+            'Indonesia': 'jakarta',
+            'Iran': 'tehran',
+            'Iraq': 'baghdad',
+            'Ireland': 'dublin',
+            'Israel': 'jerusalem',
+            'Italy': 'rome',
+            'Jamaica': 'kingston',
+            'Japan': 'tokyo',
+            'Jordan': 'amman',
+            'Kazakhstan': 'nur-sultan',
+            'Kenya': 'nairobi',
+            'Kiribati': 'tarawa',
+            'Korea, North': 'pyongyang',
+            'Korea, South': 'seoul',
+            'Kosovo': 'pristina',
+            'Kuwait': 'kuwait-city',
+            'Kyrgyzstan': 'bishkek',
+            'Laos': 'vientiane',
+            'Latvia': 'riga',
+            'Lebanon': 'beirut',
+            'Lesotho': 'maseru',
+            'Liberia': 'monrovia',
+            'Libya': 'tripoli',
+            'Liechtenstein': 'vaduz',
+            'Lithuania': 'vilnius',
+            'Luxembourg': 'luxembourg-city',
+            'Madagascar': 'antananarivo',
+            'Malawi': 'lilongwe',
+            'Malaysia': 'kuala-lumpur',
+            'Maldives': 'male',
+            'Mali': 'bamako',
+            'Malta': 'valletta',
+            'Marshall Islands': 'majuro',
+            'Mauritania': 'nouakchott',
+            'Mauritius': 'port-louis',
+            'Mexico': 'mexico-city',
+            'Micronesia': 'palikir',
+            'Moldova': 'chisinau',
+            'Monaco': 'monaco',
+            'Mongolia': 'ulaanbaatar',
+            'Montenegro': 'podgorica',
+            'Morocco': 'rabat',
+            'Mozambique': 'maputo',
+            'Myanmar': 'naypyidaw',
+            'Namibia': 'windhoek',
+            'Nauru': 'yaren',
+            'Nepal': 'kathmandu',
+            'Netherlands': 'amsterdam',
+            'New Zealand': 'wellington',
+            'Nicaragua': 'managua',
+            'Niger': 'niamey',
+            'Nigeria': 'abuja',
+            'North Macedonia': 'skopje',
+            'Norway': 'oslo',
+            'Oman': 'muscat',
+            'Pakistan': 'islamabad',
+            'Palau': 'ngerulmud',
+            'Palestine': 'jerusalem-east',
+            'Panama': 'panama-city',
+            'Papua New Guinea': 'port-moresby',
+            'Paraguay': 'asuncion',
+            'Peru': 'lima',
+            'Philippines': 'manila',
+            'Poland': 'warsaw',
+            'Portugal': 'lisbon',
+            'Qatar': 'doha',
+            'Romania': 'bucharest',
+            'Russia': 'moscow',
+            'Rwanda': 'kigali',
+            'Saint Kitts and Nevis': 'basseterre',
+            'Saint Lucia': 'castries',
+            'Saint Vincent and the Grenadines': 'kingstown',
+            'Samoa': 'apia',
+            'San Marino': 'san-marino',
+            'Sao Tome and Principe': 'sao-tome',
+            'Saudi Arabia': 'riyadh',
+            'Senegal': 'dakar',
+            'Serbia': 'belgrade',
+            'Seychelles': 'victoria',
+            'Sierra Leone': 'freetown',
+            'Singapore': 'singapore',
+            'Slovakia': 'bratislava',
+            'Slovenia': 'ljubljana',
+            'Solomon Islands': 'honiara',
+            'Somalia': 'mogadishu',
+            'South Africa': 'pretoria',
+            'South Sudan': 'juba',
+            'Spain': 'madrid',
+            'Sri Lanka': 'colombo',
+            'Sudan': 'khartoum',
+            'Suriname': 'paramaribo',
+            'Sweden': 'stockholm',
+            'Switzerland': 'bern',
+            'Syria': 'damascus',
+            'Taiwan': 'taipei',
+            'Tajikistan': 'dushanbe',
+            'Tanzania': 'dodoma',
+            'Thailand': 'bangkok',
+            'Timor-Leste': 'dili',
+            'Togo': 'lome',
+            'Tonga': 'nuku-alofa',
+            'Trinidad and Tobago': 'port-of-spain',
+            'Tunisia': 'tunis',
+            'Turkey': 'ankara',
+            'Turkmenistan': 'ashgabat',
+            'Tuvalu': 'funafuti',
+            'Uganda': 'kampala',
+            'Ukraine': 'kyiv',
+            'United Arab Emirates': 'abu-dhabi',
+            'United Kingdom': 'london',
+            'United States of America': 'washington-dc',
+            'Uruguay': 'montevideo',
+            'Uzbekistan': 'tashkent',
+            'Vanuatu': 'port-vila',
+            'Vatican City': 'vatican-city',
+            'Venezuela': 'caracas',
+            'Vietnam': 'hanoi',
+            'Yemen': 'sanaa',
+            'Zambia': 'lusaka',
+            'Zimbabwe': 'harare'
+        };
+
+
+        // Get the GeoJSON data
+        fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
+            .then(response => response.json())
+            .then(data => {
+                // Process the GeoJSON data
+                var promises = [];
+                for (var i = 0; i < data.features.length; i++) {
+                    var country = data.features[i];
+                    var countryName = country.properties.ADMIN;
+                    // Get the capital city for this country
+                    var capital = capitals[countryName];
+                    if (!capital) {
+                        continue;
+                    }
+                    console.log(capital)
+                    // Fetch the AQI data for the capital city
+                    var capital = capitals[countryName];
+                    if (!capital) {
+                        continue;
+                    }
+                    // console.log(capital);
+                    promises.push(fetchAQIAndSetStyle(country, capital));
+                }
+
+                // Wait for all the AQI data to be fetched
+                Promise.all(promises).then(() => {
+                    // Add the GeoJSON data to the map
+                    L.geoJson(data, {
+                        style: feature => feature.properties.style
+                    }).addTo(map);
+                });
+            });
+
+        // Function to map AQI to color
+        function getColor(aqi) {
+            var colors = ['#00e400', '#ffff00', '#ff7e00', '#ff0000', '#ff3f37', '#7e0023', '#bbbbbb'];
+            if (aqi <= 50) return colors[0];
+            if (aqi <= 100) return colors[1];
+            if (aqi <= 150) return colors[2];
+            if (aqi <= 200) return colors[3];
+            if (aqi <= 300) return colors[4];
+            if (aqi == undefined) return colors[6]
+            return colors[5];
+        }
+        function fetchAQIAndSetStyle(country, capital) {
+            return fetch('https://api.waqi.info/feed/' + capital + '/?token=a07e48842db5af94ad654a4fc6f3647acccdaf91')
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    var aqi = data.data.aqi;
+                    // Map the AQI to a color
+                    var color = getColor(aqi);
+
+                    // Set the style of the country
+                    country.properties.style = {
+                        fillColor: color,
+                        weight: 1,
+                        opacity: 1,
+                        color: 'white',
+                        fillOpacity: 0.7
+                    };
+                });
+        }
+    </script>
+</body>
+
+</html>

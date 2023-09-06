@@ -1,0 +1,165 @@
+@font-face {
+    font-family: 'Avenir Next';
+    src: url('fonts/AvenirNextLTPro-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Avenir Next';
+    src: url('fonts/AvenirNextLTPro-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Avenir Next';
+    src: url('fonts/AvenirNextLTPro-It.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+:root {
+    --primary-bg-color: white;
+    --secondary-bg-color: rgb(214, 214, 214);
+    --primary-text-color: rgb(0, 0, 0);
+    /*... Add other variables as needed ...*/
+}
+
+[data-theme='dark'] {
+    --primary-bg-color: #333;
+    /* Some dark color */
+    --secondary-bg-color: #666;
+    /* Some slightly lighter dark color */
+    --primary-text-color: white;
+    /*... Adjust other variables for dark mode ...*/
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Avenir Next', sans-serif;
+    background-color: var(--primary-bg-color);
+}
+
+#viewDiv {
+    position: relative;
+    width: 100%;
+    height: 88%;
+}
+
+#searchWidget {
+    max-width: 400px;
+    margin-left: 16px;
+
+}
+
+#nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+    /* background-color: white; */
+    --calcite-ui-icon-color: var(--calcite-ui-border-input);
+    --calcite-ui-brand: var(--primary-bg-color);
+    --calcite-ui-brand-hover: var(--primary-bg-color);
+    --calcite-ui-text-inverse: var(--calcite-ui-border-input);
+    padding-right: 16px;
+}
+
+body #bottom-bar {
+    position: absolute;
+    /* bottom: 5%; */
+    top: 80%;
+    /* This positions the box's top edge to the center of the viewDiv */
+    left: 50%;
+    /* This positions the box's left edge to the center of the viewDiv */
+    transform: translate(-50%, -50%);
+    /* This adjusts for the actual size of the box, centering it */
+    width: 90%;
+
+    background-color: var(--primary-bg-color);
+    z-index: 1000;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: none
+}
+
+#highest-pollution-list {
+    height: 50px;
+    display: none;
+
+}
+
+h3 {
+    font-weight: bold;
+    color: var(--primary-text-color)
+}
+
+calcite-icon,
+calcite-button {
+    scale: 1.25;
+}
+
+#custom-icon,
+calcite-switch {
+    padding-top: 5px;
+}
+
+calcite-list {
+    position: absolute;
+    top: 20px;
+    right: 5%;
+    width: 25%;
+    background-color: var(--primary-bg-color);
+    z-index: 1000;
+}
+
+#highest-pollution-title {
+    --calcite-ui-text-1: var(--primary-text-color);
+
+}
+
+#sliderValue {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--primary-text-color)
+}
+
+
+
+calcite-label {
+    --calcite-ui-text-1: var(--primary-text-color)
+}
+
+calcite-list-item {
+    --calcite-ui-text-1: var(--primary-text-color);
+    --calcite-ui-foreground-1: var(--primary-bg-color);
+    --calcite-ui-foreground-2: var(--calcite-ui-foreground-2)
+}
+
+calcite-scrim {
+    position: absolute;
+    z-index: 2000
+}
+
+calcite-loader {
+    z-index: 5000;
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    top: 50%;
+    bottom: 50%;
+}
+
+calcite-slider {
+    --calcite-ui-text-2: var(--primary-text-color);
+    --calcite-ui-foreground-1: var(--primary-bg-color);
+    --calcite-ui-foreground-2: var(--calcite-ui-foreground-2)
+}
