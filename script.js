@@ -6,13 +6,16 @@ let countriesLayer
 let UniqueValueRenderer
 let SimpleFillSymbol
 
+let aqicn_apikey = "a07e48842db5af94ad654a4fc6f3647acccdaf91"
+let argis_apikey = "AAPK2c13db0ea80c4565b7a30d62b79e0336qxRf9K8CQYgms5s3o36kP8odhNBhJbvrdmQ3HpTY9SgpW9nhlDpSUnWccFP2kZFC"
+
 async function fetchDataForCountry(value) {
     let capitalForAQICN = value['capital'].replace(/\s+/g, '-').replace(/['",.]+/g, '').toLowerCase();
     let latlng = value['latlng'];
     let lat = latlng[0];
     let lng = latlng[1];
     // console.log(latlng)
-    let responseFromAQICN = await fetch(`https://api.waqi.info/feed/geo:${lat};${lng}/?token=a07e48842db5af94ad654a4fc6f3647acccdaf91`);
+    let responseFromAQICN = await fetch(`https://api.waqi.info/feed/geo:${lat};${lng}/?token=${aqicn_apikey}`);
     let dataFromAQICN = await responseFromAQICN.json();
     let aqicnIndex = dataFromAQICN.data.aqi;
     value['aqi'] = aqicnIndex;
@@ -210,7 +213,7 @@ require(["esri/config",
     UniqueValueRenderer = UniqueValueRenderer1
     SimpleFillSymbol = SimpleFillSymbol1
     // fetchCountriesMapData();
-    esriConfig.apiKey = "AAPK2c13db0ea80c4565b7a30d62b79e0336qxRf9K8CQYgms5s3o36kP8odhNBhJbvrdmQ3HpTY9SgpW9nhlDpSUnWccFP2kZFC";
+    esriConfig.apiKey = argis_apikey;
     const locatorUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer";
 
     const map = new Map({
