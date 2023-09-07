@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <title>Capital City AQI</title>
+    <title>Global Air Quality Monitor</title>
 
     <link rel="stylesheet" href="styles.css">
     <link id="themeStylesheet" rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css">
@@ -23,7 +23,8 @@
     <calcite-scrim></calcite-scrim>
     <div id="nav-bar">
         <div id="searchWidget"></div>
-        <calcite-button id="chart-button" color="neutral" icon-start="chart-magnifying-glass">Chart</calcite-button>
+        <calcite-button id="chart-button" color="neutral" icon-start="chart-magnifying-glass">Polluted
+            Countries</calcite-button>
         <calcite-button id="show-legend-button" color="neutral" icon-start="legend">Legend</calcite-button>
         <calcite-button id="surprise-me" color="neutral" icon-start="heart">Surprise Me</calcite-button>
         <calcite-label layout="inline">
@@ -34,7 +35,7 @@
     <div id="viewDiv">
 
         <div id="bottom-bar">
-            <h3>Capital City Air Quality per Country (Air Quality Index)</h3>
+            <h3>Capital City Pollution per Country (Higher AQI = More Polluted)</h3>
             <calcite-slider snap label-ticks min-label="0" ticks="100"></calcite-slider>
             <div id="sliderValue">
             </div>
@@ -42,7 +43,7 @@
 
         <div id="highest-pollution-list">
             <calcite-list>
-                <calcite-list-item id="highest-pollution-title" label="Highest Pollution (Top 5)">
+                <calcite-list-item id="highest-pollution-title" label="Most Polluted Capital Cities (Top 5)">
                 </calcite-list-item>
 
             </calcite-list>
@@ -51,20 +52,21 @@
             <calcite-list>
                 <calcite-list-item id="highest-pollution-title" label="Color Legend for Air Quality Index">
                 </calcite-list-item>
-                <calcite-list-item id="good-legend" label="Good">
+                <calcite-list-item id="good-legend" label="Good (under 50 AQI)">
                 </calcite-list-item>
-                <calcite-list-item id="moderate-legend" label="Moderate">
+                <calcite-list-item id="moderate-legend" label="Moderate (over 50 AQI)">
                 </calcite-list-item>
-                <calcite-list-item id="unhealthy-sensitive-groups-legend" label="Unhealthy for Sensitive Groups">
+                <calcite-list-item id="unhealthy-sensitive-groups-legend"
+                    label="Unhealthy for Sensitive Groups (over 100 AQI)">
                 </calcite-list-item>
-                <calcite-list-item id="unhealthy-legend" label="Unhealthy">
+                <calcite-list-item id="unhealthy-legend" label="Unhealthy (over 150 AQI)">
                 </calcite-list-item>
-                <calcite-list-item id="very-unhealthy-legend" label="Very Unhealthy">
+                <calcite-list-item id="very-unhealthy-legend" label="Very Unhealthy (over 200 AQI)">
                 </calcite-list-item>
-                <calcite-list-item id="hazardous-legend" label="Hazardous">
+                <calcite-list-item id="hazardous-legend" label="Hazardous (over 300 AQI)">
                 </calcite-list-item>
                 </calcite-list-item>
-                <calcite-list-item id="undefined-legend" label="Not available">
+                <calcite-list-item id="undefined-legend" label="Not available/filtered">
                 </calcite-list-item>
                 </calcite-list-item>
         </div>

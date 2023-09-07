@@ -7,7 +7,7 @@ let UniqueValueRenderer
 let SimpleFillSymbol
 
 let aqicn_apikey = "a07e48842db5af94ad654a4fc6f3647acccdaf91"
-let argis_apikey = "AAPK2c13db0ea80c4565b7a30d62b79e0336qxRf9K8CQYgms5s3o36kP8odhNBhJbvrdmQ3HpTY9SgpW9nhlDpSUnWccFP2kZFC"
+let argis_apikey = "AAPK4c158153b2f445718d4dc442610b13a4E4E2dC0cdkC2QFYIUgFCyfXPbThq1tbY2A_AY9ZHyXQz2mSqpajeETNPEgAZa3de"
 
 async function fetchDataForCountry(value) {
     let capitalForAQICN = value['capital'].replace(/\s+/g, '-').replace(/['",.]+/g, '').toLowerCase();
@@ -104,7 +104,7 @@ function updateCountriesRenderer(thresholdAQI) {
     let renderer = new UniqueValueRenderer({
         field: "ISO_A3",
         defaultSymbol: new SimpleFillSymbol({ // Default symbol if not matched
-            color: "rgba(0, 0, 0, 0.8)",
+            color: "rgba(174, 174, 174, 1)",
             outline: {
                 color: [255, 255, 255, 0.5],
                 width: 0.75
@@ -176,7 +176,7 @@ function getColor(aqi) {
         "rgba(255, 85, 85, 0.8)",     // Less fluorescent red
         "rgba(255, 95, 95, 0.8)",     // Less fluorescent reddish-orange
         "rgba(140, 20, 50, 0.8)",     // Less fluorescent deep red
-        "rgba(0, 0, 0, 0.8)"    // Less fluorescent grey
+        "rgba(174, 174, 174, 1)"    // Less fluorescent grey
     ];;
     if (aqi <= 50) return colors[0];
     if (aqi <= 100) return colors[1];
@@ -268,7 +268,7 @@ require(["esri/config",
         let renderer = new UniqueValueRenderer({
             field: "ISO_A3",
             defaultSymbol: new SimpleFillSymbol({ // Default symbol if not matched
-                color: "rgba(0, 0, 0, 0.8)",
+                color: "rgba(174, 174, 174, 1)",
                 outline: {
                     color: [255, 255, 255, 0.5],
                     width: 0.75
@@ -301,7 +301,7 @@ require(["esri/config",
         view: view,
         container: "searchWidget",
     });
-
+    search.popupEnabled = false
 
 
     /*******************************************************************
@@ -333,7 +333,6 @@ require(["esri/config",
                 let capital = '';
                 let aqi = '';
                 // console.log(countryCode)
-                //https://github.com/mledoze/countries/blob/master/countries.json
 
                 countryName = countriesMap.get(countryCode)['countryName'];
                 console.log(countryName)
@@ -411,14 +410,14 @@ function showPopover(event, aqi, severity, countryName, capital) {
     // const x = event.x - rect.left;
     // const y = event.y - rect.top;
     popoverdiv.style.left = event.x + 'px';
-    popoverdiv.style.top = event.y + 100 + 'px';
+    popoverdiv.style.top = event.y + 75 + 'px';
     // Set the content of the popover. 
     // This example assumes the country feature has an attribute named 'name'.
     let color = getColor(aqi);
 
 
 
-    popover.innerHTML = `<p class="popover-content">Pollution data ${aqi || ''} <span class="highlight-text">- ${severity}</span></p>`;
+    popover.innerHTML = `<p class="popover-content">Air Quality Index ${aqi || ''} - <span class="highlight-text"> ${severity}</span></p>`;
     popover.heading = `${countryName} - ${capital}`
     let highlightText = popover.querySelector(".highlight-text");
     highlightText.style.color = color;  // Assuming 'color' is a variable with your color value
